@@ -25,11 +25,11 @@ def EggHeader():
 	print('    [-] Reserved :', b2h(res))
 
 def FileHeader():
-	fid = f.read(4)
+	fid = unpack('I', f.read(4))[0]
 	flen = f.read(8)
 	flen = unpack('Q', flen)[0]
 	print('[*] File Header')
-	print('    [-] File ID :', b2h(fid))
+	print('    [-] File ID :', fid)
 	print('    [-] File Length :', addComma(flen))
 
 def FileName():
