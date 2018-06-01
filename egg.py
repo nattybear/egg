@@ -3,12 +3,6 @@
 from sys import argv
 from struct import unpack
 
-def addComma(n):
-	n = str(n)
-	if len(n) < 4: return n
-	n = n[:-3] + ',' + n[-3:]
-	return n
-
 def b2h(b):
 	t = tuple(b)
 	l = list(map(hex, t))
@@ -30,7 +24,7 @@ def FileHeader():
 	flen = unpack('Q', flen)[0]
 	print('[*] File Header')
 	print('    [-] File ID :', fid)
-	print('    [-] File Length :', addComma(flen))
+	print('    [-] File Length :', flen)
 
 def FileName():
 	flag = f.read(1)
@@ -38,7 +32,7 @@ def FileName():
 	name = f.read(size).decode('utf-8')
 	print('[*] File Name')
 	print('    [-] Bit Flag :', b2h(flag))
-	print('    [-] Size :', addComma(size))
+	print('    [-] Size :', size)
 	print('    [-] Name :', name)
 
 def EOFARC():
@@ -51,7 +45,7 @@ def WindowsFileInformation():
 	attrib = f.read(1)
 	print('[*] Windows File Information')
 	print('    [-] Bit flag :', b2h(flag))
-	print('    [-] Size :', addComma(size))
+	print('    [-] Size :', size)
 	print('    [-] Last Midified DataTime :', b2h(time))
 	print('    [-] Attribute :', b2h(attrib))
 
@@ -61,14 +55,14 @@ def BlockHeader():
 	uncompsize = unpack('I', f.read(4))[0]
 	compsize = unpack('I', f.read(4))[0]
 	crc32 = f.read(4)
-	f.read(4) # EOFARC
+	f.read(4)  # EOFARC
 	compdata = f.read(compsize)
 	
 	print('[*] Block Header')
 	print('    [-] Compress Method(M) :', b2h(compm))
 	print('    [-] Compress Method(H) :', b2h(comph))
-	print('    [-] Uncompress Size :', addComma(uncompsize))
-	print('    [-] Compress Size :', addComma(compsize))
+	print('    [-] Uncompress Size :', uncompsize)
+	print('    [-] Compress Size :', compsize)
 	print('    [-] CRC32 :', b2h(crc32))
 
 sig =	{
@@ -82,7 +76,7 @@ sig =	{
 
 if __name__ == '__main__':
 	f = open(argv[1], 'rb')
-	while 1:
+	while True:
 		b = f.read(4)
 		if len(b) == 0: break
 		try:
